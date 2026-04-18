@@ -9,7 +9,7 @@
     "@rspack/core": "^1.7.11",
     "esbuild": "^0.28.0",
     "rolldown": "^1.0.0-rc.16",
-    "rollup": "^4.60.1",
+    "rollup": "^4.60.2",
     "vite": "^8.0.8",
     "webpack": "^5.106.2"
   }
