@@ -265,7 +265,7 @@ function init() {
       try {
         copyToClipboard(String(location));
         showTooltip(linkButton, 'Link copied');
-      } catch {
+      } catch (err) {
         showTooltip(linkButton, 'Can\'t copy link. Please copy the link manually');
       }
     });

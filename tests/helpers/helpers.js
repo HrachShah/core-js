@@ -121,7 +121,7 @@ export const nativeSubclass = (() => {
       'use strict';
       return class extends Parent { /* empty */ };
     `);
-  } catch { /* empty */ }
+  } catch (error) { /* empty */ }
 })();
 
 export function timeLimitedPromise(time, functionOrPromise) {
@@ -157,7 +157,7 @@ export function patchRegExp$exec(run) {
 export function fromSource(source) {
   try {
     return Function(`return ${ source }`)();
-  } catch { /* empty */ }
+  } catch (error) { /* empty */ }
 }
 
 export function arrayToBuffer(array) {

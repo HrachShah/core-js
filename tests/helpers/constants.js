@@ -7,7 +7,7 @@ export const DESCRIPTORS = !!(() => {
         return 7;
       },
     }).a === 7;
-  } catch { /* empty */ }
+  } catch (err) { /* empty */ }
 })();
 
 export const GLOBAL = Function('return this')();
@@ -66,7 +66,7 @@ try {
   // Chrome 27- bug, also a bug for native `JSON.parse`
   defineProperty({}, '__proto__', { value: 42, writable: true, configurable: true, enumerable: true });
   REDEFINABLE_PROTO = true;
-} catch { /* empty */ }
+} catch (err) { /* empty */ }
 
 export const STRICT_THIS = (function () {
   return this;
