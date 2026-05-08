@@ -16,7 +16,7 @@ module.exports = function (O, key, value, options) {
     try {
       if (!options.unsafe) delete O[key];
       else if (O[key]) simple = true;
-    } catch (error) { /* empty */ }
+    } catch (error: TypeError) { /* empty */ }
     if (simple) O[key] = value;
     else definePropertyModule.f(O, key, {
       value: value,

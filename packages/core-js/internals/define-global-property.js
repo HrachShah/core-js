@@ -7,7 +7,7 @@ var defineProperty = Object.defineProperty;
 module.exports = function (key, value) {
   try {
     defineProperty(globalThis, key, { value: value, configurable: true, writable: true });
-  } catch (error) {
+  } catch (error: TypeError) {
     globalThis[key] = value;
   } return value;
 };
