@@ -113,7 +113,7 @@ function init() {
 
     docsVersionLinks.forEach(link => {
       const defaultVersion = link.getAttribute('data-default-version');
-      const re = new RegExp(`${ defaultVersion }/`);
+      const re = new RegExp(`${ defaultVersion.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') }/`);
       const newLink = link.getAttribute('href').replace(re, '');
       link.setAttribute('href', newLink);
     });
