@@ -16,6 +16,7 @@ var setPrototypeOf = require('../internals/object-set-prototype-of');
 var wellKnownSymbol = require('../internals/well-known-symbol');
 var uid = require('../internals/uid');
 var InternalStateModule = require('../internals/internal-state');
+var hostReportErrors = require('../internals/host-report-errors');
 
 var enforceInternalState = InternalStateModule.enforce;
 var getInternalState = InternalStateModule.get;
@@ -95,7 +96,16 @@ var exportTypedArrayMethod = function (KEY, property, forced, options) {
       // old WebKit bug - some methods are non-configurable
       try {
         TypedArrayConstructor.prototype[KEY] = property;
-      } catch (error2) { /* empty */ }
+      } catch (error2) {
+        // Both the `delete` and the re-assign failed on this
+        // particular constructor. The most common cause is the
+        // old WebKit "non-configurable" bug, but it can also be a
+        // cross-realm Proxy or a non-writable property. Surface
+        // the typed-array name and the failing key in the
+        // host-report-errors path so the bug is reproducible
+        // from the console instead of being silently dropped.
+        hostReportErrors(ARRAY + ' prototype.' + KEY + ' re-assign failed: ' + error2);
+      }
     }
   }
   if (!TypedArrayPrototype[KEY] || forced) {
@@ -112,13 +122,24 @@ var exportTypedArrayStaticMethod = function (KEY, property, forced) {
       TypedArrayConstructor = globalThis[ARRAY];
       if (TypedArrayConstructor && hasOwn(TypedArrayConstructor, KEY)) try {
         delete TypedArrayConstructor[KEY];
-      } catch (error) { /* empty */ }
+      } catch (error) {
+        // A static method on a specific typed-array constructor
+        // was non-configurable. This is rarer than the prototype
+        // case above, but the same diagnostic value applies.
+        hostReportErrors(ARRAY + '.' + KEY + ' delete failed: ' + error);
+      }
     }
     if (!TypedArray[KEY] || forced) {
       // V8 ~ Chrome 49-50 `%TypedArray%` methods are non-writable non-configurable
       try {
         return defineBuiltIn(TypedArray, KEY, forced ? property : NATIVE_ARRAY_BUFFER_VIEWS && TypedArray[KEY] || property);
-      } catch (error) { /* empty */ }
+      } catch (error) {
+        // The fallback defineBuiltIn for the %TypedArray% namespace
+        // itself failed. This was a silent /* empty */ before; we
+        // now report the key so the failure shows up in
+        // hostReportErrors' console.error when available.
+        hostReportErrors('%TypedArray%.' + KEY + ' define failed: ' + error);
+      }
     } else return;
   }
   for (ARRAY in TypedArrayConstructorsList) {
