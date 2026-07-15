@@ -32,6 +32,12 @@ deepEqual(targetsParser({ browsers: 'ie 11, chrome 56, ios_saf 12.2' }), new Map
   ['ios', '12.2-12.5'],
 ]), 'targets.browsers');
 
+deepEqual(targetsParser({ browsers: { Chrome: 56, IOS_SAF: '12.2', AND_CHR: 60 } }), new Map([
+  ['chrome', '56'],
+  ['chrome-android', '60'],
+  ['ios', '12.2'],
+]), 'targets.browsers object normalisation');
+
 deepEqual(targetsParser({ esmodules: true }), new Map([
   ['android', '61'],
   ['bun', '0.1.1'],

@@ -59,7 +59,7 @@ module.exports = function (targets) {
     if (typeof browsers == 'string' || Array.isArray(browsers)) {
       list.push(...browserslist(browsers).map(it => it.split(' ')));
     } else {
-      list.push(...Object.entries(browsers));
+      list.push(...Object.entries(toLowerKeys(browsers)));
     }
   }
 
