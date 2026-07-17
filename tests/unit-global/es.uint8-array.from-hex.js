@@ -11,6 +11,7 @@ if (DESCRIPTORS) QUnit.test('Uint8Array.fromHex', assert => {
   assert.true(fromHex.call(Int16Array, '48656c6c6f20576f726c64') instanceof Uint8Array, 'returns Uint8Array instance #2');
 
   assert.deepEqual(fromHex('48656c6c6f20576f726c64'), new Uint8Array([72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100]), 'proper result');
+  assert.deepEqual(fromHex(''), new Uint8Array([]), 'empty string result');
 
   assert.throws(() => fromHex(null), TypeError, "isn't generic #1");
   assert.throws(() => fromHex(undefined), TypeError, "isn't generic #2");
