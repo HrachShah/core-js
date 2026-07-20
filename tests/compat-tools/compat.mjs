@@ -82,6 +82,12 @@ deepEqual(compat({
 }, 'no target');
 
 deepEqual(compat({
+  modules: /^es\.math\.a/g,
+}), compat({
+  modules: /^es\.math\.a/,
+}), 'global regular expression');
+
+deepEqual(compat({
   modules: /^es\.math\.a/,
 }), {
   list: [

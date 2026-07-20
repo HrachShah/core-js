@@ -20,7 +20,14 @@ function getModules(filter) {
     if (has(entries, filter)) return entries[filter];
     return atLeastSomeModules(allModules.filter(it => it.startsWith(filter)), filter);
   }
-  if (filter instanceof RegExp) return atLeastSomeModules(allModules.filter(it => filter.test(it)), filter);
+  if (filter instanceof RegExp) {
+    const matcher = filter.global || filter.sticky ? new RegExp(filter) : filter;
+    return atLeastSomeModules(allModules.filter(it => {
+      const result = matcher.test(it);
+      if (matcher.global || matcher.sticky) matcher.lastIndex = 0;
+      return result;
+    }), filter);
+  }
   throwInvalidFilter(filter);
 }
 
